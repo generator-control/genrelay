@@ -3,7 +3,7 @@
  * Author: deh
  * Latest edit: 20200114
  */
-include <N64_plat.scad>
+//include <N64_plat.scad>
 include <library_deh/deh_shapes.scad>
 include <library_deh/deh_shapes2.scad>
  $fn = 20;

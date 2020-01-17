@@ -4,7 +4,7 @@
  * Latest edit: 20200115
  */
 
- 
+ $fn = 20;
  
  // Nucleo plate (top)
  sidew = 5;
@@ -27,9 +27,11 @@ N64_ht_blo =  9.2; // Height: bottom pcb to bottom hdr pins
 N64_ht_abv = 10.7; // Height: bottom pcb to top hdr pins
  
 // Nucleo mounting 'b' hole positions
- N64_hole1 = ([  28.0,  10.8,  0]);
- N64_hole4 = ([  29.1,  59.0,  0]);
- N64_hole5 = ([  79.3,  44.1,  0]);
+N64_refx = 28.0;
+N64_refy = 10.8;
+ N64_hole1 = ([  28.0-N64_refx,  10.8-N64_refy,  0]);
+ N64_hole4 = ([  29.1-N64_refx,  59.0-N64_refy,  0]);
+ N64_hole5 = ([  79.3-N64_refx,  44.1-N64_refy,  0]);
 // Offset of above points from edge of board
  N64_holeoffset = ([0,0,0]);
 
@@ -69,14 +71,60 @@ module N64_post_holes (a,dia)
  * a    = translate (ref: bottom, left, corner)
  * module N64_posts (a);
  */
-module N64_posts (a)
+module N64_posts(a)
 {
 	translate(a)
 	translate([0,0,0])
 	{
-		N64_post(N64_hole1,2.9,2.9,9);
-		N64_post(N64_hole4,2.9,2.9,9);
-		N64_post(N64_hole5,2.9,2.9,9);
+		N64_post(N64_hole1,7.5,4.5,2.9,9);
+		N64_post(N64_hole4,7.5,4.5,2.9,9);
+		N64_post(N64_hole5,7.5,4.5,2.9,9);
+	}
+}
+// Holes that go through base
+module N64_postholes(a)
+{
+ds = 2.9;    
+	translate(a)
+	translate([0,0,0])
+	{
+		translate(N64_hole1) cylinder(d=ds,h=50,center=true);
+		translate(N64_hole4) cylinder(d=ds,h=50,center=true);
+		translate(N64_hole5) cylinder(d=ds,h=50,center=true);
 	}
 }
 
+module N64_hull(thk)
+{
+    linear_extrude(height = thk, center = false, convexity = 10)
+    {
+        hull()
+        {
+            translate(N64_hole1) circle(d=8);
+            translate(N64_hole4) circle(d=8);
+            translate(N64_hole5) circle(d=8);
+        }
+    }
+}
+module N64_frame(a,b)
+{
+  translate(a) rotate(b)
+    difference()
+    {
+        union()
+        {
+            N64_hull(thick1);
+				N64_posts([0,0,0]);
+        }
+        union()
+        {
+            translate([6,8,-.01])
+              scale([0.7,0.65,1.0]) 
+                N64_hull(thick1+1);
+            
+            N64_postholes([0,0,0]);
+        }
+    }
+}
+//N64_hull();
+//N64_frame([0,0,0]);
