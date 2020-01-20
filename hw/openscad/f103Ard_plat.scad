@@ -18,7 +18,7 @@ include <library_deh/deh_shapes2.scad>
  fbase  = [bwid, fleng, thick2]; // fethe subboard base
  
  // BP Motherboard (f103Ard) 'a' hole locations
- delx = (1.006);   // X calibration adjustment
+ delx = (1.001);   // X calibration adjustment
  dely = (1.000);   // Y calibration adjustment
 f103A_offx = 3.8;  // Position posts on grid
 f103A_offy = 42.0;
